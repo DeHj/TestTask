@@ -43,18 +43,12 @@ public class task4 {
             }
         }
 
-        // The peopleCount array presents people count
-        int[] peopleCount = new int[nMinutes + 1];
+        // The peopleCount array presents people count in time
+        int[] peopleCount = new int[nMinutes];
 
         peopleCount[0] = peopleDiff[0];
         for (int i = 1; i < nMinutes; i++) {
-            peopleCount[i] = peopleCount[i - 1];
-
-            if (peopleDiff[i] > 0)
-                peopleCount[i] += peopleDiff[i];
-
-            if (peopleDiff[i - 1] < 0)
-                peopleCount[i] += peopleDiff[i - 1];
+            peopleCount[i] = peopleCount[i - 1] + peopleDiff[i];
         }
 
         // Finding a time segment with the maximum number of visitors:
@@ -62,15 +56,15 @@ public class task4 {
         segments.add(new TimeSegment(0, 720, 0));
 
         int curFrom = 0;
-        for (int i = 0; i < nMinutes; i++) {
+        for (int i = 0; i < nMinutes - 1; i++) {
             // Check in case of segment end:
             if (peopleCount[i + 1] < peopleCount[i]) {
                 if (peopleCount[i] > segments.get(0).visitorsCount) {
                     segments.clear();
-                    segments.add(new TimeSegment(curFrom, i, peopleCount[i]));
+                    segments.add(new TimeSegment(curFrom, i + 1, peopleCount[i]));
                 }
                 else if (peopleCount[i] == segments.get(0).visitorsCount) {
-                    segments.add(new TimeSegment(curFrom, i, peopleCount[i]));
+                    segments.add(new TimeSegment(curFrom, i + 1, peopleCount[i]));
                 }
             }
             // Check in case of segment start:
